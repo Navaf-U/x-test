@@ -237,7 +237,6 @@ const Tweet: React.FC<TweetProps> = ({
           <button
             onClick={handleRepost}
             className="flex items-center space-x-1 hover:text-green-500"
-            //repost
           >
             <FaRetweet />
             <span>{repost}</span>

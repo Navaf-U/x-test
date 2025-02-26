@@ -21,8 +21,8 @@ export type Comment = {
 export interface TweetData {
   _id: string;
   user: UserDetails;
-//   pfp: string;
-//  userName: string;
+  pfp?: string;
+ userName?: string;
   text: string;
   createdAt: string;
   media?: string[];

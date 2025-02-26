@@ -3,7 +3,6 @@ import {
   fetchAllUsers,
   fetchFollowersOrFollowing,
   fetchUserData,
-  toggleFollow,
 } from "../thunks/user-thunks";
 import { FollowUser, User } from "@/utils/types/types";
 

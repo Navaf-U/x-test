@@ -19,8 +19,10 @@ export const fetchAllTweets = createAsyncThunk('tweets/fetchAll', async (_, { re
 
 export const fetchUserTweets = createAsyncThunk('tweets/fetchUserTweets', async (username: string, { rejectWithValue }) => {
     try {
-        const response = await axiosInstance.get(`/api/tweets/user/${username}`);
+        const response = await axios.get(`http://localhost:3008/api/user/tweets/user/${username}`);
+        console.log(response.data);
         return response.data.tweets;
+
     } catch (error) {
         if (axios.isAxiosError(error) && error.response) {
             return rejectWithValue(error.response.data);
@@ -55,6 +57,19 @@ export const deleteTweet = createAsyncThunk<string, string>('2tweets/delete', as
     }
     }
 });
+
+export const retweetTweet = createAsyncThunk(
+    'tweets/retweetTweet',
+    async (tweetId: string, { rejectWithValue }) => {
+      try {
+        const response = await axiosInstance.post(`/api/user/tweets/repost/${tweetId}`);
+        console.log("tweeet ",response)
+        return response.data;
+      } catch (error) {
+        return rejectWithValue(error.response.data);
+      }
+    }
+  );
 
 export const likeTweet = createAsyncThunk('tweets/like', async (tweetId, { rejectWithValue }) => {
     try {
@@ -118,12 +133,14 @@ const tweetSlice = createSlice({
                 state.status = 'failed';
                 state.error = typeof action.payload === 'string' 
                 ? action.payload 
-                : (action.payload as { message?: string })?.message || "Something went wrong!";
+                : (action.payload as { message?: string })?.message || "Something went wrong!"
             })
-            .addCase(fetchAllTweets.fulfilled, (state, action) => {
-                state.tweets = action.payload;
-                state.status = 'succeeded';
-            })
+              .addCase(retweetTweet.fulfilled, (state, action) => {    
+                const updatedTweet = state.tweets.find(tweet => tweet._id === action.payload.tweetId);
+                if (updatedTweet) {
+                  updatedTweet.reposts = action.payload.reposts;
+                }
+              })
             .addCase(fetchUserTweets.fulfilled, (state, action) => {
                 state.userTweets = action.payload;
             })

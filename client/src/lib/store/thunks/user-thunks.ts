@@ -26,7 +26,6 @@ const Instance = axios.create({
     "user/fetchUserData",
     async (userName: string) => {
       const {data} = await Instance.get(`/user/user/${userName}`);
-      console.log(data.user)
       return data?.user;
     }
   );

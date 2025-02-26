@@ -10,8 +10,6 @@ import {
 import { FaXTwitter } from "react-icons/fa6";
 import { BiBookmark } from "react-icons/bi";
 import { RiQuillPenAiLine } from "react-icons/ri";
-
-import Cookies from "js-cookie";
 import Link from "next/link";
 import Image from "next/image";
 import { useAppSelector } from "@/lib/store/hook";
@@ -28,7 +26,6 @@ const Sidebar: React.FC = () => {
   const [loggedInUser, setLoggedInUser] = useState<User | null>(null);
   const [showLogoutPopup, setShowLogoutPopup] = useState(false);
   const currentUser = useAppSelector((state) => state.auth.user);
-  console.log(currentUser)
   useEffect(() => {
     if (currentUser) {
       setLoggedInUser(currentUser);
