@@ -146,7 +146,7 @@ const Tweet: React.FC<TweetProps> = ({
     setSave(!save);
   };
 
-  const handleComment = (tweet: string) => {
+  const handleComment = (tweets: string) => {
     dispatch(fetchUserComments(tweets?._id));
   };
 
@@ -154,13 +154,13 @@ const Tweet: React.FC<TweetProps> = ({
     if (_id && !tweets) {
       dispatch(fetchAllTweets(tweets?._id));
     }
-  }, [_id, tweets, dispatch]);
+  }, [_idf]);
 
-  useEffect(() => {
-    if (_id) {
-      dispatch(fetchUserComments());
-    }
-  }, [_id, dispatch]);
+  // useEffect(() => {
+  //   if (_id) {
+  //     dispatch(fetchUserComments(_id));
+  //   }
+  // }, [_id]);
 
   return (
     <div className="bg-black text-white border-b border-gray-700 p-4 flex space-x-4">
@@ -169,7 +169,7 @@ const Tweet: React.FC<TweetProps> = ({
           <Image
             src={user?.pfp}
             alt={`${user?.userName}'s profile`}
-            className="w-12 h-12 rounded-full"
+            className="w-12 h-12 rounded-full object-cover"
             width={48}
             height={48}
           />

@@ -314,23 +314,25 @@ const commentOnTweet = async (req, res, next) => {
 
 const fetchUserComments = async (req, res, next) => {
   try {
-    const userId = req.user.id;
-
-    const comments = await Comment.find({ user: userId })
-      .populate("user", "userName pfp") 
-      .populate({
-        path: "tweet",
-        populate: {
-          path: "user",
-          select: "userName pfp", 
-        },
-      })
+    const tweetId = req.params.id;
+    if (!tweetId) {
+      return next(new CustomError("Tweet ID is required", 400));
+    }
+    
+    const comments = await Comment.find({ tweet: tweetId })
+      .populate("user", "userName pfp _id")
       .sort({ createdAt: -1 });
-
+    
+    const tweet = await Tweet.findById(tweetId);
+    if (tweet) {
+      tweet.commentCount = comments.length;
+      await tweet.save();
+    }
+    
     res.status(200).json({ comments });
   } catch (error) {
-    console.error("Error fetching user comments:", error);
-    next(new CustomError("Error retrieving user comments", 500));
+    console.error("Error fetching tweet comments:", error);
+    next(new CustomError("Error retrieving tweet comments", 500));
   }
 };
 

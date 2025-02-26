@@ -1,5 +1,5 @@
 "use client";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { toast } from "react-toastify";
 import {
   Dialog,
@@ -16,6 +16,7 @@ import {
   createComment,
   deleteComment,
   fetchUserComments,
+  resetComments
 } from "@/lib/store/features/comments-slice";
 import Image from "next/image";
 import { socket } from "@/lib/socket";
@@ -27,6 +28,7 @@ type CommentProps = {
     pfp: string;
   };
 };
+
 
 const CommentBox: React.FC<CommentProps> = ({ tweet }) => {
   const [commentText, setCommentText] = useState<string>("");
@@ -43,6 +45,9 @@ const CommentBox: React.FC<CommentProps> = ({ tweet }) => {
     }>;
   };
   const dispatch = useAppDispatch();
+  const tweetID = tweet?._id; 
+
+
   const handleSubmit = () => {
     if (commentText.trim() === "") {
       toast.info("Comment cannot be empty");
@@ -57,12 +62,14 @@ const CommentBox: React.FC<CommentProps> = ({ tweet }) => {
         socket.emit("comment", { tweetId: tweet?._id, userId: user?._id });
         toast.success("Comment submitted successfully");
         setCommentText("");
-        dispatch(fetchUserComments());
+        dispatch(fetchUserComments(tweetID));
       })
       .catch((err) => {
         toast.error(err.message || "Failed to submit comment");
       });
   };
+
+  
 
   const handleDeleteComment = (commentId: string) => {
     console.log("Deleting comment with ID:", commentId);
@@ -77,8 +84,18 @@ const CommentBox: React.FC<CommentProps> = ({ tweet }) => {
         toast.error(err || "Failed to delete comment");
       });
 
-    dispatch(fetchUserComments());
+      if(tweetID){
+        dispatch(fetchUserComments(tweetID));
+      }
   };
+
+
+  useEffect(()=>{
+    if(tweetID){
+      dispatch(resetComments());
+      dispatch(fetchUserComments(tweetID));
+    }
+  },[tweetID])
 
   return (
     <Dialog>
@@ -186,8 +203,6 @@ const CommentBox: React.FC<CommentProps> = ({ tweet }) => {
             </div>
           ))}
         </div>
-
-        {error && <div className="text-red-500 mt-4">{error}</div>}
       </DialogContent>
     </Dialog>
   );

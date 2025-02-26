@@ -91,7 +91,7 @@ router
   .post("/tweets/repost/:id", verifyToken, repostTweet)
   .post("/tweets/comment/:id", verifyToken, commentOnTweet)
   .delete("/tweets/comment/:id",verifyToken,deleteComment)
-  .get("/tweets/fetchUserComments", verifyToken, tryCatch(fetchUserComments))
+  .get("/tweets/get-comments/:id", tryCatch(fetchUserComments))
   .get("/tweets/:userId", verifyToken, tryCatch(fetchUserTweets))
   //follow
   .post("/follow/:id", verifyToken, tryCatch(followUserToggle))

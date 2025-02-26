@@ -19,9 +19,10 @@ export const createComment = createAsyncThunk(
 
 export const fetchUserComments = createAsyncThunk(
   "comments/fetchUserComments",
-  async (_, { rejectWithValue }) => {
+  async (tweetId, { rejectWithValue }) => {
     try {
-      const response = await axiosInstance.get("/api/user/tweets/fetchUserComments");
+      const response = await axios.get(`http://localhost:3008/api/user/tweets/get-comments/${tweetId}`);
+      console.log(response.data.comments);
       return response.data.comments;
 
     } catch (error) {
@@ -55,7 +56,10 @@ const commentSlice = createSlice({
     loading: false,
     error: null as string | null,
   },
-  reducers: {},
+  reducers: {resetComments: (state) => {
+    state.comments = [];
+  }
+},
   extraReducers: (builder) => {
     builder
       .addCase(createComment.pending, (state) => {
@@ -93,5 +97,5 @@ const commentSlice = createSlice({
       })
   },
 });
-
+export const { resetComments } = commentSlice.actions;
 export default commentSlice.reducer;
