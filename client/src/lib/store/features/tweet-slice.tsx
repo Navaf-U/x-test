@@ -17,6 +17,19 @@ export const fetchAllTweets = createAsyncThunk('tweets/fetchAll', async (_, { re
     }
 });
 
+export const fetchUserTweets = createAsyncThunk('tweets/fetchUserTweets', async (username: string, { rejectWithValue }) => {
+    try {
+        const response = await axiosInstance.get(`/api/tweets/user/${username}`);
+        return response.data.tweets;
+    } catch (error) {
+        if (axios.isAxiosError(error) && error.response) {
+            return rejectWithValue(error.response.data);
+        } else {
+            return rejectWithValue(error);
+        }
+    }
+});
+
 export const createTweet = createAsyncThunk('tweets/create', async (tweetData, { rejectWithValue }) => {
     try {
         const response = await axiosInstance.post(`/api/user/tweets/create`, tweetData);
@@ -85,6 +98,7 @@ const tweetSlice = createSlice({
     initialState: {
         tweets: [] as TweetData[],
         savedTweets: [] as TweetData[],
+        userTweets: [] as TweetData[],
         activeTab: "forYou", 
         status: 'idle',
         error: null as string | null,
@@ -105,6 +119,13 @@ const tweetSlice = createSlice({
                 state.error = typeof action.payload === 'string' 
                 ? action.payload 
                 : (action.payload as { message?: string })?.message || "Something went wrong!";
+            })
+            .addCase(fetchAllTweets.fulfilled, (state, action) => {
+                state.tweets = action.payload;
+                state.status = 'succeeded';
+            })
+            .addCase(fetchUserTweets.fulfilled, (state, action) => {
+                state.userTweets = action.payload;
             })
             .addCase(createTweet.fulfilled, (state, action: PayloadAction<TweetData>) => {
                 state.tweets.unshift(action.payload);
