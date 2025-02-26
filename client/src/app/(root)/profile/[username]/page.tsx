@@ -17,7 +17,6 @@ import {
   saveTweet,
 } from "@/lib/store/features/tweet-slice";
 import { socket } from "@/lib/socket";
-import { fetchUserComments } from "@/lib/store/features/comments-slice";
 import {
   FaBookmark,
   FaComment,
@@ -154,9 +153,6 @@ useEffect(() => {
     }
   };
 
-  const handleComment = (tweetId: string) => {
-    dispatch(fetchUserComments(tweetId));
-  };
 
   useEffect(() => {
     const retweetedTweets = userTweets.reduce((acc, tweet) => {

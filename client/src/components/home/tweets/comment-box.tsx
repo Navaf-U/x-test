@@ -46,7 +46,16 @@ const CommentBox: React.FC<CommentProps> = ({ tweet }) => {
   };
   const dispatch = useAppDispatch();
   const tweetID = tweet?._id; 
+  const [isDialogOpen, setIsDialogOpen] = useState(false);
 
+  const handleDialogOpen = (open: boolean) => {
+    setIsDialogOpen(open);
+    if (open && tweetID) {
+      dispatch(resetComments());
+      dispatch(fetchUserComments(tweetID));
+    }
+  };
+  
 
   const handleSubmit = () => {
     if (commentText.trim() === "") {
@@ -90,15 +99,13 @@ const CommentBox: React.FC<CommentProps> = ({ tweet }) => {
   };
 
 
-  useEffect(()=>{
-    if(tweetID){
-      dispatch(resetComments());
-      dispatch(fetchUserComments(tweetID));
-    }
-  },[tweetID])
+  // useEffect(()=>{
+  //     dispatch(resetComments());
+  //     dispatch(fetchUserComments(tweetID));
+  // },[])
 
   return (
-    <Dialog>
+    <Dialog onOpenChange={handleDialogOpen}>
       <DialogTrigger asChild>
         <Button variant="ghost" className="hover:bg-black p-2">
           <FaComment className="text-white" />

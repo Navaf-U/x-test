@@ -17,22 +17,22 @@ export const createComment = createAsyncThunk(
     }    
 );
 
-export const fetchUserComments = createAsyncThunk(
-  "comments/fetchUserComments",
-  async (tweetId, { rejectWithValue }) => {
-    try {
-      const response = await axios.get(`http://localhost:3008/api/user/tweets/get-comments/${tweetId}`);
-      console.log(response.data.comments);
-      return response.data.comments;
+  export const fetchUserComments = createAsyncThunk(
+    "comments/fetchUserComments",
+    async (tweetId : string, { rejectWithValue }) => {
+      try {
+        const response = await axiosInstance.get(`/api/user/tweets/get-comments/${tweetId}`);
+        console.log(response.data);
+        return response.data.comments;
 
-    } catch (error) {
-        if (axios.isAxiosError(error)) {
-            return rejectWithValue(error.response?.data?.message || "An error occurred while fetching tweets");
-        }
-        return rejectWithValue("Something went wrong");
-    }
-    }    
-);
+      } catch (error) {
+          if (axios.isAxiosError(error)) {
+              return rejectWithValue(error.response?.data?.message || "An error occurred while fetching tweets");
+          }
+          return rejectWithValue("Something went wrong");
+      }
+      }    
+  );
 
 export const deleteComment = createAsyncThunk(
   "comments/deleteComment",

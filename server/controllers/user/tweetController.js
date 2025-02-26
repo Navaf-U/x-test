@@ -315,6 +315,8 @@ const commentOnTweet = async (req, res, next) => {
 const fetchUserComments = async (req, res, next) => {
   try {
     const tweetId = req.params.id;
+    console.log("Fetching comments for tweet ID:", tweetId);
+
     if (!tweetId) {
       return next(new CustomError("Tweet ID is required", 400));
     }
