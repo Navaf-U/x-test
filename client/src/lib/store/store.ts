@@ -5,6 +5,7 @@ import userReducer from "@/lib/store/features/user-slice";
 import notificationReducer from "@/lib/store/features/notification-slice";
 import chatReducer from "@/lib/store/features/chat-slice";
 import commentReducer from "@/lib/store/features/comments-slice";
+import followReducer from "@/lib/store/features/follow-slice"
 export const store = configureStore({
   reducer: {
     auth: authReducer,
@@ -12,7 +13,8 @@ export const store = configureStore({
     user: userReducer,
     notification: notificationReducer,
     chat: chatReducer,
-    comments : commentReducer
+    comments : commentReducer,
+    follow: followReducer
   },
 });
 

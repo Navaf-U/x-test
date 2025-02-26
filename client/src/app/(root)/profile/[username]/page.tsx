@@ -26,6 +26,8 @@ import {
   FaRegHeart,
   FaRetweet,
 } from "react-icons/fa6";
+import { fetchFollowCount, fetchFollowStatus, toggleFollow } from "@/lib/store/features/follow-slice";
+import { useRouter } from "next/navigation";
 
 const getParams = (pathname: string) => {
   const parts = pathname.split("/");
@@ -37,6 +39,7 @@ const ProfilePage = () => {
   const { userName } = getParams(pathname);
   const dispatch = useAppDispatch();
   const [userProfile, setUserProfile] = useState<{
+    _id: string;
     username: string;
     fullname: string;
     bio: string;
@@ -51,6 +54,28 @@ const ProfilePage = () => {
   const [saved, setSaved] = useState<{ [key: string]: boolean }>({});
   const userTweets = useSelector((state: RootState) => state.tweets.userTweets);
   const currentUser = useSelector((state: RootState) => state.auth.user);
+  const {isFollowing, followerCount, followingCount} = useSelector((state: RootState) => state.follow);
+  const router = useRouter()
+
+  console.log("tttttttttt",
+  isFollowing,
+  followerCount,
+  followingCount
+)
+
+useEffect(() => {
+  if (userName) {
+    dispatch(fetchUserData(userName)).then((res) => {
+      if (res.payload?._id) {
+        setUserProfile(res.payload);
+        dispatch(fetchFollowCount(res.payload._id));
+        dispatch(fetchFollowStatus(res.payload._id));
+      }
+    });
+  }
+}, [userName, dispatch]);
+
+
 
   const handleLike = async (postId: string) => {
     try {
@@ -167,12 +192,34 @@ const ProfilePage = () => {
       try {
         const user = await dispatch(fetchUserData(userName)).unwrap();
         setUserProfile(user);
+        if (currentUser) {
+          await dispatch(fetchFollowStatus(user?._id));
+        }
       } catch (error) {
         console.error("Failed to fetch user profile:", error);
       }
     };
     fetchProfile();
   }, [dispatch, userName]);
+
+  const handleFollow = async () => {
+    if (!currentUser) return;
+    try {
+      const wasFollowing = isFollowing;
+      await dispatch(toggleFollow(userProfile?._id)).unwrap();
+  
+      if (wasFollowing) {
+        dispatch(fetchFollowStatus(userProfile?._id));
+        dispatch(fetchFollowCount(userProfile?._id));
+      } else {
+        dispatch(fetchFollowStatus(userProfile?._id));
+        dispatch(fetchFollowCount(userProfile?._id));
+      }
+    } catch (error) {
+      console.error("Failed to follow/unfollow user:", error);
+    }
+  };
+  
 
   if (!userProfile) {
     return <div className="text-center text-white">Loading profile...</div>;
@@ -202,15 +249,19 @@ const ProfilePage = () => {
             </div>
           ) : (
             <div className="w-full flex justify-end mt-[-40px]">
-              <button className="bg-white flex justify-center items-center px-4 py-2 rounded-full hover:bg-gray-200 text-black">
-                <p className="font-bold">Follow</p>
+              <button onClick={handleFollow} className="bg-white flex justify-center items-center px-4 py-2 rounded-full hover:bg-gray-200 text-black">
+                <p className="font-bold">{isFollowing ? "Following" : "Follow"}</p>
               </button>
             </div>
           )}
         </div>
         <div className="p-6 flex gap-6">
-          <p>0 follwoing</p>
-          <p>0 followers</p>
+        <p onClick={() => router.push(`/profile/${userName}/following`)} className="cursor-pointer">
+            {followingCount} Following
+          </p>
+          <p onClick={() => router.push(`/profile/${userName}/followers`)} className="cursor-pointer">
+            {followerCount} Followers
+          </p>
         </div>
         <div className="p-6">
           <h2 className="text-xl font-bold">Posts</h2>

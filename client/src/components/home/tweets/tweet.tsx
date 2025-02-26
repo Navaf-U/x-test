@@ -164,7 +164,7 @@ const Tweet: React.FC<TweetProps> = ({
 
   return (
     <div className="bg-black text-white border-b border-gray-700 p-4 flex space-x-4">
-      <Link href={`/${user?.userName}`}>
+      <Link href={`/profile/${user?.userName}`}>
         {user?.pfp ? (
           <Image
             src={user?.pfp}

@@ -96,9 +96,9 @@ router
   //follow
   .post("/follow/:id", verifyToken, tryCatch(followUserToggle))
   .delete("/remove/:id", verifyToken, tryCatch(removeFollower))
-  .get("/followers/:id", verifyToken, tryCatch(getFollowerList))
-  .get("/following/:id", verifyToken, tryCatch(getFollowingList))
-  .get("/follow-count/:id", verifyToken, tryCatch(getFollowCount))
+  .get("/followers/:id", tryCatch(getFollowerList))
+  .get("/following/:id", tryCatch(getFollowingList))
+  .get("/follow-count/:id",  tryCatch(getFollowCount))
   .get("/follow-status/:id", verifyToken, tryCatch(getFollowStatus))
 
 //user

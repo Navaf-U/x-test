@@ -4,7 +4,7 @@ import Follow  from "../../models/followSchema.js";
 import CustomError from "../../utils/customError.js";
 import { io, userSocketMap } from "../../socket.js";
 const followUserToggle = async (req, res, next) => {
-    const followingId = req.params.id; // Fixed this line
+    const followingId = req.params.id;
     const follower = await User.findById(req.user.id);
     const following = await User.findById(followingId);
 
@@ -62,7 +62,7 @@ const removeFollower = async (req, res, next) => {
 
 
 const getFollowerList = async (req, res, next) => {
-    const followers = await Follow.find({ following: req.params.id }).populate("follower", "userName pfp ");//add name
+    const followers = await Follow.find({ following: req.params.id }).populate("follower", "userName pfp ");
     if(followers.length===0){
         return res.status(200).json({ followers: [], message: "No followers found" });
     }
