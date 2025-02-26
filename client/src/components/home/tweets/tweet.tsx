@@ -135,7 +135,6 @@ const Tweet: React.FC<TweetProps> = ({
       setLikesCount((prevCount = 0) => (liked ? prevCount + 1 : prevCount - 1));
     }
   };
-  
 
   const handleRepost = () => {
     setRepost(repost && repost + 1);
@@ -154,7 +153,7 @@ const Tweet: React.FC<TweetProps> = ({
     if (_id && !tweets) {
       dispatch(fetchAllTweets(tweets?._id));
     }
-  }, [_idf]);
+  }, [_id]);
 
   // useEffect(() => {
   //   if (_id) {
