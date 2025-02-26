@@ -220,6 +220,7 @@ const getSavedTweets = async (req, res, next) => {
 };
 
 
+
 // Repost a tweet
 const repostTweet = async (req, res, next) => {
   try {
@@ -409,7 +410,7 @@ const getUserTweets = async (req, res, next) => {
   try {
     const { username } = req.params;
 
-    const user = await User.findOne({ username });
+    const user = await User.findOne({ userName:username });
     if (!user) {
       return next(new CustomError("User not found", 404));
     }

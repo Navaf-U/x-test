@@ -3,7 +3,7 @@ import Notification from "../../models/notificationModel.js";
 import Follow  from "../../models/followSchema.js";
 import CustomError from "../../utils/customError.js";
 import { io, userSocketMap } from "../../socket.js";
-const followUser = async (req, res, next) => {
+const followUserToggle = async (req, res, next) => {
     const followingId = req.params.id; // Fixed this line
     const follower = await User.findById(req.user.id);
     const following = await User.findById(followingId);
@@ -91,4 +91,4 @@ const getFollowStatus = async (req, res, next) => {
     }
 };
 
-export { followUser, removeFollower, getFollowerList, getFollowingList, getFollowCount, getFollowStatus };
+export { followUserToggle, removeFollower, getFollowerList, getFollowingList, getFollowCount, getFollowStatus };

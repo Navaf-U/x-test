@@ -32,16 +32,15 @@ import {
 import {
   getOneUser,
   userProfilePic,
-  getUsersByUsername,
 } from "../controllers/user/userQueryController.js";
 
 import {
-  followUser,
   removeFollower,
   getFollowerList,
   getFollowingList,
   getFollowCount,
   getFollowStatus,
+  followUserToggle,
 } from "../controllers/user/followController.js";
 
 const router = express.Router();1
@@ -95,7 +94,7 @@ router
   .get("/tweets/fetchUserComments", verifyToken, tryCatch(fetchUserComments))
   .get("/tweets/:userId", verifyToken, tryCatch(fetchUserTweets))
   //follow
-  .post("/follow/:id", verifyToken, tryCatch(followUser))
+  .post("/follow/:id", verifyToken, tryCatch(followUserToggle))
   .delete("/remove/:id", verifyToken, tryCatch(removeFollower))
   .get("/followers/:id", verifyToken, tryCatch(getFollowerList))
   .get("/following/:id", verifyToken, tryCatch(getFollowingList))
