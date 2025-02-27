@@ -4,12 +4,21 @@
 // import { useSession, } from "next-auth/react";
 
 // import { useRouter } from "next/navigation";
-import React, {  useState } from "react";
+import React, {  useEffect, useState } from "react";
 import LoginForm from "./login";
 import RegisterForm from "./register";
+import { useAppSelector } from "@/lib/store/hook";
+import { useRouter } from "next/navigation";
 
 export default function Home() {
- 
+ const {user} = useAppSelector((state) => state.auth);
+  const router = useRouter()
+
+  useEffect(() => {
+    if(user){
+      return router.push("/home") 
+     } 
+  },[])
   // const router = useRouter();
   // const dispatch = useAppDispatch();
 
@@ -46,7 +55,6 @@ export default function Home() {
   // }, [session?.user, dispatch, router]);
 
   // Handle form submission
-
 
   return (
     <div className="flex justify-center md:flex-row h-screen bg-black text-white">

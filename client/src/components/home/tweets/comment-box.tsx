@@ -125,7 +125,7 @@ const CommentBox: React.FC<CommentProps> = ({ tweet }) => {
               alt="profile"
               height={50}
               width={50}
-              className="border rounded-full"
+              className=" object-cover rounded-full"
             />
           )}
           <div className="flex-1">
@@ -147,7 +147,7 @@ const CommentBox: React.FC<CommentProps> = ({ tweet }) => {
               alt="profile"
               height={40}
               width={40}
-              className="rounded-full"
+              className="w-20 h-20 rounded-full object-cover"
             />
           )}
           <div className="flex-1">
@@ -178,15 +178,15 @@ const CommentBox: React.FC<CommentProps> = ({ tweet }) => {
           {comments.map((comment) => (
             <div
               key={comment._id}
-              className="flex items-start gap-3 p-4 bg-gray-900 rounded-xl"
+              className="flex items-center  gap-3 p-4 bg-gray-900 rounded-xl"
             >
               {comment.user.pfp ? (
                 <Image
                   src={comment.user.pfp}
                   alt="profile"
-                  height={30}
-                  width={30}
-                  className="rounded-full"
+                  height={70}
+                  width={70}
+                  className="w-12 h-12 object-cover rounded-full"
                 />
               ) : (
                 <div className="w-8 h-8 bg-gray-500 rounded-full" />
