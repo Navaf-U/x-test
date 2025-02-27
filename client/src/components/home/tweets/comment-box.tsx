@@ -89,6 +89,7 @@ const CommentBox: React.FC<CommentProps> = ({ tweet }) => {
         socket.emit("deleteComment", { commentId });
         toast.success(res.message);
       })
+      dispatch(fetchUserComments(tweetID))
       .catch((err) => {
         toast.error(err || "Failed to delete comment");
       });
