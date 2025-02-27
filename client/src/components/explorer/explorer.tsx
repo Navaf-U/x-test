@@ -74,7 +74,8 @@ const Explore: React.FC = () => {
 
         {users.length > 0 && (
           <div className="bg-gray-800 rounded-2xl p-4">
-            {users.map((user: { _id: string; pfp: string; name: string; username: string }) => (
+            {users.map((user: { _id: string; pfp: string; name: string; userName: string }) => (
+              <Link key={user._id} href={`/profile/${user.userName}`}>
               <div
                 key={user._id}
                 className="flex items-center space-x-4 p-2 border-b border-gray-600"
@@ -88,9 +89,10 @@ const Explore: React.FC = () => {
                 />
                 <div>
                   <h3 className="font-bold">{user.name}</h3>
-                  <p className="text-sm text-gray-400">@{user.username}</p>
+                  <p className="text-sm text-gray-400">@{user.userName}</p>
                 </div>
               </div>
+              </Link>
             ))}
           </div>
         )}
