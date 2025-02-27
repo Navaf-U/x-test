@@ -151,4 +151,33 @@ const getMessageList = async (req, res, next) => {
   
 };
 
-export { sendMessage, getMessages, markDmAsRead, getMessageList };
+const getOrCreateChat = async (req, res, next) => {
+  const { user1, user2 } = req.params;
+
+  try {
+    const existingMessages = await Message.findOne({
+      $or: [
+        { sender: user1, receiver: user2 },
+        { sender: user2, receiver: user1 },
+      ],
+    });
+
+    if (existingMessages) {
+      return res.status(200).json({ chatId: existingMessages._id });
+    }
+
+    // Create a new message thread if none exists
+    const newMessage = await Message.create({
+      sender: user1,
+      receiver: user2,
+      content: "",
+    });
+
+    return res.status(201).json({ chatId: newMessage._id });
+  } catch (error) {
+    next(new CustomError("Failed to get or create chat", 500));
+  }
+};
+
+
+export {getOrCreateChat, sendMessage, getMessages, markDmAsRead, getMessageList };

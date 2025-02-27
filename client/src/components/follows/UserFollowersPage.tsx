@@ -2,7 +2,7 @@
 import { useEffect, useState } from "react";
 import { usePathname } from "next/navigation";
 import { useAppDispatch, useAppSelector } from "@/lib/store/hook";
-import { fetchFollowers, fetchFollowerCount } from "@/lib/store/features/follow-slice";
+import { fetchFollowers } from "@/lib/store/features/follow-slice";
 import { fetchUserData } from "@/lib/store/thunks/user-thunks";
 import SearchSection from "../home/search-section/search-section";
 import Image from "next/image";
@@ -39,7 +39,6 @@ const FollowersPage = () => {
         if (res.payload?._id) {
           setUserProfile(res.payload);
           dispatch(fetchFollowers(res.payload?._id));
-          dispatch(fetchFollowerCount(res.payload?._id));
         }
       });
     }

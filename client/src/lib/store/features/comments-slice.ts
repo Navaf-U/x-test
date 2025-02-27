@@ -30,7 +30,7 @@ export const createComment = createAsyncThunk(
               return rejectWithValue(error.response?.data?.message || "An error occurred while fetching tweets");
           }
           return rejectWithValue("Something went wrong");
-      }
+      } 
       }    
   );
 

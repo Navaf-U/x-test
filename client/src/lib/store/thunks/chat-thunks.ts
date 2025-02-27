@@ -6,7 +6,7 @@ export const fetchParticipants = createAsyncThunk(
   async (_, { rejectWithValue }) => {
     try {
       const response = await axiosInstance.get("/messages/list");
-      return response.data.data.participants;
+      return response.data.users;
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (error: any) {
       return rejectWithValue(error.response.data);
@@ -19,7 +19,9 @@ export const fetchChatMessages = createAsyncThunk(
   async (chatId: string, { rejectWithValue }) => {
     try {
       const response = await axiosInstance.get(`/messages/chat${chatId}`);
+      console.log(response.data , 'fetchChatMessages')
       return response.data.data;
+
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (error: any) {
       return rejectWithValue(error.response.data);
